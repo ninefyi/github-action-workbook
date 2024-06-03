@@ -1,0 +1,22 @@
+name: Turn off Azure VM
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "0 0 * * 6" # Runs every Saturday at 00:00 AM UTC
+jobs:
+    turn-off-azure-vm:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Azure Login
+          uses: azure/login@v2
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+        - name: Stop Azure VM
+          uses: azure/cli@v2
+          with:
+            azcliversion: latest
+            inlineScript: |
+                status=$(az vm get-instance-view --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --query 'instanceView.statuses[1].displayStatus' --output tsv)
+                if [ "$status" = "VM running" ]; then
+                    az vm deallocate --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --subscription ${{ vars.SUBSCRIPTION_ID }}
+                fi
