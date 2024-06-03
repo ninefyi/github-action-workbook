@@ -3,6 +3,9 @@ on:
     workflow_dispatch:
     schedule:
         - cron: "0 0 * * 6" # Runs every Saturday at 00:00 AM UTC
+permissions:
+  id-token: write
+  contents: read
 jobs:
     turn-off-azure-vm:
         runs-on: ubuntu-latest
