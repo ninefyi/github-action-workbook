@@ -1,2 +1,2 @@
 # github-action-workbook
-Github Actions Daily Workbook
+Github Actions workbooks for daily.
