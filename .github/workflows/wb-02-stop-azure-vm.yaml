@@ -33,7 +33,7 @@ jobs:
                 echo "VM_STATUS=$output" >> "$GITHUB_OUTPUT"
         - name: send message to GitHub Discussion
           run: | 
-            output="${{ steps.start-vm.outputs.VM_STATUS }}"
+            output="${{ steps.stop-vm.outputs.VM_STATUS }}"
             data='{"query": "mutation { addDiscussionComment(input: { body: \"'${output}'\" discussionId: \"D_kwDOMED81c4AZ01H\" clientMutationId: \"1234\"}) { clientMutationId comment { id body } } }"}'
             curl -v POST -H "Authorization: bearer ${{ secrets.GH_PAT }}" \
             -H "Content-Type: application/json" \
