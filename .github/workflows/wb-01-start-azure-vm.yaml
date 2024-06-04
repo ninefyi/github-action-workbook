@@ -10,6 +10,8 @@ jobs:
     turn-on-azure-vm:
         runs-on: ubuntu-latest
         steps:
+        - name: install curl
+          run: sudo apt-get install curl -y
         - name: Azure Login
           uses: azure/login@v2
           with:
