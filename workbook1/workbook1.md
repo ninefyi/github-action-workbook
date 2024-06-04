@@ -1,3 +1,9 @@
+# Workbook 1: How to create GitHub Actions for Azure VM start/stop scheduler.
+## Instructions
+- install Azure CLI []()
+- install GitHub CLI []()
+- create service priciple with federated credential and assign it to the target resource group
+
 ```sh {"id":"01HZE0Y6M2B9E353GN36EC4TC7"}
 az ad sp create-for-rbac \
 --name "<principle-name>" \
