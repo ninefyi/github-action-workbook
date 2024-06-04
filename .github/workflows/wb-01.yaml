@@ -33,4 +33,4 @@ jobs:
           with:
             discussion-id: 'D_kwDOMED81c4AZ01H'
             body: "VM start output: ${{ steps.start-vm.outputs.vm-start-output }}"
-            token: ${{ secrets.GH_TOKEN }}
+            token: ${{ secrets.GH_PAT }}
