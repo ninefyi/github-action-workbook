@@ -21,7 +21,16 @@ jobs:
           with:
             azcliversion: latest
             inlineScript: |
+                output="VM was not deallocated, so it was not started.""
                 status=$(az vm get-instance-view --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --query 'instanceView.statuses[1].displayStatus' --output tsv)
                 if [ "$status" = "VM deallocated" ]; then
-                    az vm start --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --subscription ${{ vars.SUBSCRIPTION_ID }}
+                  output=$(az vm start --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --subscription ${{ vars.SUBSCRIPTION_ID }})
                 fi
+                echo "::set-output name=vm-start-output::$output"
+        - name: Run create-discussion-comment
+          uses: wesleyscholl/create-discussion-comment@v1.0.18
+          id: create-comment
+          with:
+            discussion-id: 'D_kwDOMED81c4AZ01H'
+            body: "VM start output: ${{ steps.start-vm.outputs.vm-start-output }}"
+            token: ${{ secrets.GH_TOKEN }}
