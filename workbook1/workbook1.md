@@ -1,13 +1,13 @@
 ```sh {"id":"01HZE0Y6M2B9E353GN36EC4TC7"}
 az ad sp create-for-rbac \
---name "[PRINCIPLE-NAME]" \
+--name "<principle-name>" \
 --role Contributor \
---scopes /subscriptions/[SUBSCRIPTION-ID]/resourceGroups/[RESOURCE-GROUP] \
+--scopes /subscriptions/<subscription-id>/resourceGroups/<resource-group> \
 --years 10
 ```
 
 ```sh {"id":"01HZEE5E60392XN4C7Z09KXY8D"}
-az ad app federated-credential create --id [APPLICATION=OBJECT-ID] --parameters credential.json
+az ad app federated-credential create --id <application-client-id> --parameters credential.json
 ```
 
 ```sh {"id":"01HZE18F3VVGX26T9YKMX1MXTJ"}
