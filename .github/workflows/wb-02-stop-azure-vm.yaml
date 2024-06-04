@@ -27,11 +27,11 @@ jobs:
                 if [ "$status" = "VM running" ]; then
                     output=$(az vm deallocate --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --subscription ${{ vars.SUBSCRIPTION_ID }})
                 fi
-                echo "::set-output name=vm-stop-output::$output"
+                echo "VM_STATUS=$output" >> "$GITHUB_OUTPUT"
         - name: Run create-discussion-comment
           uses: wesleyscholl/create-discussion-comment@v1.0.18
           id: create-comment
           with:
             discussion-id: 'D_kwDOMED81c4AZ01H'
-            body: "VM stop output: ${{ steps.stop-vm.outputs.vm-stop-output }}"
+            body: "VM stop output: ${{ steps.stop-vm.outputs.VM_STATUS }}"
             token: ${{ secrets.GH_PAT }}
