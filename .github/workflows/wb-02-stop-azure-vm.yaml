@@ -25,13 +25,8 @@ jobs:
                 output="VM was not running, so it was not stopped."
                 status=$(az vm get-instance-view --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --query 'instanceView.statuses[1].displayStatus' --output tsv)
                 if [ "$status" = "VM running" ]; then
-                    output=$(az vm deallocate --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --subscription ${{ vars.SUBSCRIPTION_ID }})
+                  az vm deallocate --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --subscription ${{ vars.SUBSCRIPTION_ID }}
+                  output="VM is stopping!"
                 fi
-                echo "VM_STATUS=$output" >> "$GITHUB_OUTPUT"
-        - name: Run create-discussion-comment
-          uses: wesleyscholl/create-discussion-comment@v1.0.18
-          id: create-comment
-          with:
-            discussion-id: 'D_kwDOMED81c4AZ01H'
-            body: "VM stop output: ${{ steps.stop-vm.outputs.VM_STATUS }}"
-            token: ${{ secrets.GH_PAT }}
+                curl -v POST -H "Authorization: bearer ${{ secrets.GH_PAT }}" -H "Content-Type: application/json" -d '{"query": "mutation { addDiscussionComment(input: {body: \"'$output'\" discussionId: \"D_kwDOMED81c4AZ01H\" clientMutationId: \"1234\"}) { clientMutationId comment { id body } } }"}' https://api.github.com/graphql
+                echo "$output"
