@@ -30,5 +30,10 @@ jobs:
                   az vm deallocate --name ${{ vars.VM_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --subscription ${{ vars.SUBSCRIPTION_ID }}
                   output="VM is stopping!"
                 fi
-                curl -v POST -H "Authorization: bearer ${{ secrets.GH_PAT }}" -H "Content-Type: application/json" -d '{"query": "mutation { addDiscussionComment(input: {body: \"'$output'\" discussionId: \"D_kwDOMED81c4AZ01H\" clientMutationId: \"1234\"}) { clientMutationId comment { id body } } }"}' https://api.github.com/graphql
-                echo "$output"
+                echo "VM_STATUS=$output" >> "$GITHUB_OUTPUT"
+        - name: send message to GitHub Discussion
+          run: | 
+            output="${{ steps.stop-vm.outputs.VM_STATUS }}"
+            curl -v POST -H "Authorization: bearer ${{ secrets.GH_PAT }}" \
+            -H "Content-Type: application/json" \
+            -d '{"query": "mutation { addDiscussionComment(input: { body: \"'$output'\" discussionId: \"D_kwDOMED81c4AZ01H\" clientMutationId: \"1234\"}) { clientMutationId comment { id body } } }"}' https://api.github.com/graphql
